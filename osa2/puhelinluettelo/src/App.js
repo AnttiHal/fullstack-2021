@@ -1,50 +1,57 @@
 import React, { useState } from 'react'
 
+import Persons from './components/Persons'
+import PersonForm from './components/PersonForm'
+
 const App = () => {
   const [ persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas',
+      number: '0404405043' }
   ]) 
   const [ newName, setNewName ] = useState('')
+  const [ newNumber, setNewNumber ] = useState('')
 
-  const addName = (event) => {
+  const addPerson = (event) => {
     event.preventDefault()
     const nameObject = {
       name: newName, 
-      
+      number: newNumber
     }
     console.log('nameObject.name: ' +nameObject.name)
     if (persons.map(person => person.name).includes(nameObject.name)) {
-      window.alert('nimi ${nameObject.name} on jo käytössä!');
+      window.alert(`nimi ${nameObject.name} on jo käytössä!`);
     } else {
     setPersons(persons.concat(nameObject))
+    console.log('ollaan elsessä')
+    console.log('new name: ' + newName)   
     setNewName('')
-    console.log(newName)
+    setNewNumber('')  
+    console.log('newname after empty: '+newName) 
+    
     }
+      
   }
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
     
   }
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value)
+    
+  }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addName}>
-        <div>
-          name: <input value={newName}
-          onChange={handleNameChange}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      <ul>
-        {persons.map(person => <li key={person.name}>{person.name}</li>)}
-        
-        
-      </ul>
+      <PersonForm 
+      name={newName} 
+      number={newNumber}
+      handleNameChange={handleNameChange} 
+      handleNumberChange={handleNumberChange}
+      onSubmit={addPerson}/>      
+      <h2>Numbers</h2>            
+      <Persons persons={persons}/>             
     </div>
   )
 
