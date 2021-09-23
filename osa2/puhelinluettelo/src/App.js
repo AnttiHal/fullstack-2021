@@ -1,15 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 
+import personService from './services/persons'
+
 const App = () => {
-  const [ persons, setPersons] = useState([
-    { name: 'Arto Hellas',
-      number: '0404405043' }
-  ]) 
+  const [ persons, setPersons] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
+
+
+
+  useEffect(() => {
+    console.log('effect')
+    personService
+    .getAll()
+    .then(initialPersons => {
+      setPersons(initialPersons)
+    })
+  }, [])
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -21,13 +31,15 @@ const App = () => {
     if (persons.map(person => person.name).includes(nameObject.name)) {
       window.alert(`nimi ${nameObject.name} on jo käytössä!`);
     } else {
-    setPersons(persons.concat(nameObject))
-    console.log('ollaan elsessä')
-    console.log('new name: ' + newName)   
-    setNewName('')
-    setNewNumber('')  
-    console.log('newname after empty: '+newName) 
-    
+      personService
+        .create(nameObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
+        
+        
     }
       
   }
@@ -45,8 +57,8 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <PersonForm 
-      name={newName} 
-      number={newNumber}
+      newName={newName} 
+      newNumber={newNumber}
       handleNameChange={handleNameChange} 
       handleNumberChange={handleNumberChange}
       onSubmit={addPerson}/>      
