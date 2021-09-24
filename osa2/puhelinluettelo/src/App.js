@@ -35,13 +35,24 @@ const App = () => {
         .create(nameObject)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
-          setNewName('')
-          setNewNumber('')
-        })
-        
-        
+          
+        })        
+    }   
+    setNewName('')
+          setNewNumber('')   
+  }
+
+  const delPerson = (person) => {
+    const id = person.id
+    if (window.confirm(`haluatko varmasti poistaa kohteen ${person.name}?`)) {
+      personService
+      .del(id)
+      .then(setPersons(persons.filter(person => person.id !== id)))
     }
-      
+    
+
+
+
   }
 
   const handleNameChange = (event) => {
@@ -63,7 +74,7 @@ const App = () => {
       handleNumberChange={handleNumberChange}
       onSubmit={addPerson}/>      
       <h2>Numbers</h2>            
-      <Persons persons={persons}/>             
+      <Persons persons={persons} delPerson={delPerson}/>             
     </div>
   )
 
