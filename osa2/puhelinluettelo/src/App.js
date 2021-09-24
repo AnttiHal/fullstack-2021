@@ -9,6 +9,8 @@ const App = () => {
   const [ persons, setPersons] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
+  const [ notificationMessage, setNotificationMessage] = useState(null)
+  const [ notificationType, setNotificationType] = useState('confirm')
 
 
 
@@ -29,13 +31,22 @@ const App = () => {
     }
     console.log('nameObject.name: ' +nameObject.name)
     if (persons.map(person => person.name).includes(nameObject.name)) {
-      window.alert(`nimi ${nameObject.name} on jo käytössä!`);
+      setNotificationType('error')
+      setNotificationMessage(`nimi ${nameObject.name} on jo käytössä!`)
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 5000)
+      
     } else {
       personService
         .create(nameObject)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
-          
+          setNotificationType('confirm')
+          setNotificationMessage(`kohde ${nameObject.name} lisätty onnistuneesti.`)
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 5000)
         })        
     }   
     setNewName('')
@@ -48,6 +59,15 @@ const App = () => {
       personService
       .del(id)
       .then(setPersons(persons.filter(person => person.id !== id)))
+      .catch(error => {
+        setNotificationType('error')
+        setNotificationMessage(`kohde ${person.name} on jo poistettu palvelimelta.`)
+      })
+      setNotificationType('confirm')
+      setNotificationMessage(`kohde ${person.name} poistettu onnistuneesti.`)
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 5000)
     }
     
 
@@ -64,9 +84,21 @@ const App = () => {
     
   }
 
+  const Notification = ({message, type }) => {
+    if (message === null) {
+      return null
+    }
+    return (
+      <div className={type}>
+        {message}
+      </div>
+    )
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} type={notificationType}/>
       <PersonForm 
       newName={newName} 
       newNumber={newNumber}
