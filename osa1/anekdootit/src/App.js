@@ -1,19 +1,8 @@
 import React, { useState } from 'react'
 
 
-const Button = ({ handleClick, text }) => (
-  <button onClick={handleClick}>
-    {text}
-  </button>
-)
 
 const App = () => {
-  const points = new Uint8Array(7); 
-  const copy = [...points]
-  const [votes, setVotes] = useState({
-    0: 0, 1: 3, 2: 345, 3: 0, 4: 56, 5: 0, 6: 0
-  })
-
   const anecdotes = [
     'If it hurts, do it more often.',
     'Adding manpower to a late software project makes it later!',
@@ -23,6 +12,13 @@ const App = () => {
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when dianosing patients.'
   ]
+  const [votes, setVotes] = useState({
+    0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0
+  })
+  const [maximumVotes, setMaximumVotes] = useState(0)
+  const [maximumAnecdote, setMaximumAnecdote] = useState(anecdotes[0])
+
+  
   const generateRandomInteger = () => {
     return Math.floor(Math.random() * 6) + 1;
 }
@@ -30,26 +26,33 @@ let startNum = generateRandomInteger()
 const [selected, setSelected] = useState(startNum)
   
 const handleVoteCLick = () => {
-  let num = selected
-  setVotes({...votes, num: votes.num +1})
-  console.log(num)
-  console.log(votes.num)
+  console.log(selected)
+  const copy = {...votes}
+  copy[selected]+=1
+  setVotes(copy)
+  if (maximumVotes<votes[selected]) {
+    setMaximumVotes(votes[selected])
+    setMaximumAnecdote(anecdotes[selected])
+  }
 }
 
-const handleRandomClick = () => {
-  
+const handleRandomClick = () => {  
   setSelected(generateRandomInteger())
 }
 
   return (
     <div>
+      <h1>Anecdotes</h1>
       {anecdotes[selected]}
       <br/>
-      has {votes[0]}votes
+      has {votes[selected]} votes
       
       <br/>
       <button onClick={handleVoteCLick}>vote</button>
       <button onClick={handleRandomClick}>next anecdote</button>
+      <h1>Anecdote with most votes</h1>
+      <p>{maximumAnecdote}</p>
+      <p>has {maximumVotes} votes</p>
     </div>
   )
 }

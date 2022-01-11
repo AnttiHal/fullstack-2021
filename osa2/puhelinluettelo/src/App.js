@@ -44,9 +44,11 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNotificationType('confirm')
           setNotificationMessage(`kohde ${nameObject.name} lisätty onnistuneesti.`)
-        setTimeout(() => {
-          setNotificationMessage(null)
-        }, 5000)
+        
+        }).catch(error => {
+          setNotificationType('error')
+          console.log(error.response.data)
+          setNotificationMessage(JSON.stringify(error.response.data))         
         })        
     }   
     setNewName('')
