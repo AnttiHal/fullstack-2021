@@ -107,6 +107,29 @@ test('there are 6 blogs', async () => {
     expect(contents).toContain('React patterns')
   })
 
+  test('when adding blog with empty likes-field, returns 0 likes', async () => {
+    await Blog.deleteMany({})
+    const newBlog = {
+        title: "Test author",
+        author: "Michael Chan",
+        url: "https://reactpatterns.com/",
+        
+      }
+  
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  
+    const response = await api.get('/api/blogs')
+  
+    const blogs = response.body
+    
+    expect(blogs[0].likes).toBe(0)
+    
+  })
+
 afterAll(() => {
   mongoose.connection.close()
 })
