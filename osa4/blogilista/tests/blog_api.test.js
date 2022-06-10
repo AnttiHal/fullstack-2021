@@ -149,6 +149,34 @@ test('there are 6 blogs', async () => {
 
       //expect(contents).not.toContain(noteToDelete.content)
     })
+
+    test('updating succeeds', async () => {
+        const newBlog = {
+            title: "Elämäni presidenttinä",
+            author: "Sauli Niinistö",
+            url: "suomi.fi",
+            likes: 1
+          }
+
+        const response = await api.get('/api/blogs')
+        const list = response.body
+        
+        blogToBeUpdatedId = list[0].id
+        
+      await api
+        .put(`/api/blogs/${blogToBeUpdatedId}`)
+        .send(newBlog)
+        
+
+        const response2 = await api.get('/api/blogs')
+        const list2 = response2.body
+        const updatedBlog = list2[0]
+      expect(updatedBlog.author).toBe("Sauli Niinistö")
+
+      //const contents = notesAtEnd.map(r => r.content)
+
+      //expect(contents).not.toContain(noteToDelete.content)
+    })
   
 
 
