@@ -79,10 +79,32 @@ test('there are 6 blogs', async () => {
     expect(response.body).toHaveLength(initialBlogs.length)
   })
 
-  test('_id is defined', async () => {
+  test('id is defined', async () => {
     const response = await api.get('/api/blogs')
   
     expect(response.body[0].id).toBeDefined()
+  })
+
+  test('a valid blog can be added ', async () => {
+    const newBlog = {
+        title: "React patterns",
+        author: "Michael Chan",
+        url: "https://reactpatterns.com/",
+        likes: 7,
+      }
+  
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  
+    const response = await api.get('/api/blogs')
+  
+    const contents = response.body.map(r => r.title)
+  
+    expect(response.body).toHaveLength(initialBlogs.length + 1)
+    expect(contents).toContain('React patterns')
   })
 
 afterAll(() => {
