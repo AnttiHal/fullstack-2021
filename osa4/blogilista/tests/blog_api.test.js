@@ -178,6 +178,19 @@ test('there are 6 blogs', async () => {
       //expect(contents).not.toContain(noteToDelete.content)
     })
   
+    test('get code 400 when inserting blog without title and url', async () => {
+        
+        const newBlog = {
+            author: "Michael Chan",
+          }
+      
+        await api
+          .post('/api/blogs')
+          .send(newBlog)
+          .expect(400)
+          
+        
+      })
 
 
 afterAll(() => {

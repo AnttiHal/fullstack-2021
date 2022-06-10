@@ -13,6 +13,9 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
     const body = request.body
+    if (!body.title && !body.url) {
+      response.status(400).send('Bad request!')
+    } else {
     const blog = new Blog({
       title: body.title,
       author: body.author,
@@ -22,11 +25,11 @@ blogsRouter.post('/', async (request, response) => {
   
     const savedBlog = await blog.save()
     response.status(201).json(savedBlog)
-  })
+  }})
 
   blogsRouter.put('/:id', (request, response, next) => {
     const body = request.body
-  
+    
     const blog = {
       title: body.title,
       author: body.author,
@@ -37,7 +40,7 @@ blogsRouter.post('/', async (request, response) => {
       .then(updatedBlog => {
         response.json(updatedBlog)
       })
-      
+  
   })
 
 
