@@ -76,7 +76,13 @@ test('notes are returned as json', async () => {
 test('there are 6 blogs', async () => {
     const response = await api.get('/api/blogs')
   
-    expect(response.body).toHaveLength(6)
+    expect(response.body).toHaveLength(initialBlogs.length)
+  })
+
+  test('_id is defined', async () => {
+    const response = await api.get('/api/blogs')
+  
+    expect(response.body[0].id).toBeDefined()
   })
 
 afterAll(() => {
