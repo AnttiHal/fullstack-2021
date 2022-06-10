@@ -130,6 +130,28 @@ test('there are 6 blogs', async () => {
     
   })
 
+  
+    test('deletion succeeds with status code 204 if id is valid', async () => {
+        const response = await api.get('/api/blogs')
+        const list = response.body
+        
+        blogToDeleteId = list[0].id
+        
+      await api
+        .delete(`/api/blogs/${blogToDeleteId}`)
+        .expect(204)
+
+        const response2 = await api.get('/api/blogs')
+        const list2 = response2.body
+      expect(list2).toHaveLength(5)
+
+      //const contents = notesAtEnd.map(r => r.content)
+
+      //expect(contents).not.toContain(noteToDelete.content)
+    })
+  
+
+
 afterAll(() => {
   mongoose.connection.close()
 })
