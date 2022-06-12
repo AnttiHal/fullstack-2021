@@ -1,9 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFudHRpcG9pa2EiLCJpZCI6IjYyYTVkZDU2NjBkMWJkNWFhMWJhNTVjZSIsImlhdCI6MTY1NTAzODg1NX0.GBrmuTXL9NgMytYeZ3NRBVuhn9sLd_qIgCp9duuLXzA
 
 {
-  "title": "testiotsikko",
-  "author": "graham greene",
-  "url": "www.test.fi",
-  "likes": 5
+  "title": "kerran kävi näin",
+  "author": "Matti Kukkarossa",
+  "url": "www.wtf.fi",
+  "likes": 4
 }
