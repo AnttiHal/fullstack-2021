@@ -27,6 +27,15 @@ const App = () => {
     }
   }, [])
 
+  const handleLogout = async () => {
+    window.localStorage.removeItem('loggedBlogappUser')
+    setErrorMessage('Successfully logged out. Happy day!')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+      setUser(null)
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -86,7 +95,7 @@ const App = () => {
         <div>
       <Notification message={errorMessage} />
       <h2>blogs</h2>
-      <p>{user.name} logged in</p>
+      <p>{user.name} logged in <button onClick={handleLogout}>Logout</button></p>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
