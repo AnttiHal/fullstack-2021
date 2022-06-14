@@ -44,6 +44,17 @@ const App = () => {
     })
   }
 
+  const handleLikechange = async (blog) => {
+    await blogService.like({
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes+1,
+      
+
+    })
+  }
+
 
   const handleLogout = async () => {
     window.localStorage.removeItem('loggedBlogappUser')
@@ -118,7 +129,7 @@ const App = () => {
         <BlogForm createBlog={addBlog}/>
     </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} handleLikechange={handleLikechange}/>
       )}
     </div>
       )
