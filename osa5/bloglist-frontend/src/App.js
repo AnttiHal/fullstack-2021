@@ -59,6 +59,15 @@ const App = () => {
     setReload(reload+1)
   }
 
+  const handleDelete = async (blog) => {
+    console.log(blog.id)
+    if (window.confirm(`Remove ${blog.title} by ${blog.author}`)) {
+      await blogService.remove(blog.id)
+    setReload(reload+1)
+    }
+    
+  }
+
 
   const handleLogout = async () => {
     window.localStorage.removeItem('loggedBlogappUser')
@@ -133,7 +142,7 @@ const App = () => {
         <BlogForm createBlog={addBlog}/>
     </Togglable>
       {blogs.sort((a,b) => (a.likes>b.likes)) && blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} handleLikechange={handleLikechange}/>
+        <Blog key={blog.id} blog={blog} handleLikechange={handleLikechange} handleDelete={handleDelete}/>
       )}
     </div>
       )

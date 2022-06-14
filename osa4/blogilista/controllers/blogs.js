@@ -14,16 +14,18 @@ blogsRouter.get('/', async (request, response) => {
   })
 
   blogsRouter.delete('/:id', async (request, response) => {
-    const token = request.token
-    const decodedToken = jwt.verify(token, process.env.SECRET)
-    const blog = await Blog.findById(request.params.id)
-    if (blog.user.toString() === decodedToken.id) {
-      await Blog.findByIdAndRemove(request.params.id)
-      response.status(204).end()
-    } else {
-      response.status(400).send('Bad request!')
-    }
-  })
+    console.log("id bäkkärissä"+request.params.id)
+    const blogToDelete = await Blog.findById(request.params.id)
+  if (!blogToDelete ) {
+    return response.status(204).end()
+  }
+
+  
+
+  await Blog.findByIdAndRemove(request.params.id)
+
+  response.status(204).end()
+})
 /*
   const getTokenFrom = request => {
     const authorization = request.get('authorization')
