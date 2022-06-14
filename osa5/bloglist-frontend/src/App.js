@@ -14,13 +14,15 @@ const App = () => {
   const [password, setPassword] = useState('') 
   const [errorMessage, setErrorMessage] = useState(null)
   const [user, setUser] = useState(null)
+  const [reload, setReload] = useState(null)
+  
   
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )  
-  }, [])
+  }, [reload])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -46,6 +48,7 @@ const App = () => {
 
   const handleLikechange = async (blog) => {
     await blogService.like({
+      id: blog.id,
       title: blog.title,
       author: blog.author,
       url: blog.url,
@@ -53,6 +56,7 @@ const App = () => {
       
 
     })
+    setReload(reload+1)
   }
 
 
