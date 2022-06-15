@@ -23,42 +23,43 @@ const BlogForm = ({ createBlog }) => {
   }
 
   return (
-    <div>
-      <h2>Create new</h2>
-      <form onSubmit={addBlog}>
-        <div>
+    <form onSubmit={addBlog}>
+      <div>
+        <h2>Create new</h2>
+      </div>
+      <div>
           title:
-          <input
-            type="text"
-            value={title}
-            name="Title"
-            onChange={({ target }) => setTitle(target.value)}
-            placeholder='write title'
-          />
-        </div>
-        <div>
+        <input
+          type="text"
+          value={title}
+          name="Title"
+          onChange={({ target }) => setTitle(target.value)}
+          placeholder='write title'
+        />
+      </div>
+      <div>
           author:
-          <input
-            type="text"
-            value={author}
-            name="Author"
-            onChange={({ target }) => setAuthor(target.value)}
-            placeholder='write author'
-          />
-        </div>
-        <div>
+        <input
+          type="text"
+          value={author}
+          name="Author"
+          onChange={({ target }) => setAuthor(target.value)}
+          placeholder='write author'
+        />
+      </div>
+      <div>
           url:
-          <input
-            type="text"
-            value={url}
-            name="Url"
-            onChange={({ target }) => setUrl(target.value)}
-            placeholder='write url'
-          />
-        </div>
-        <button type="submit">create</button>
-      </form>
-    </div>
+        <input
+          type="text"
+          value={url}
+          name="Url"
+          onChange={({ target }) => setUrl(target.value)}
+          placeholder='write url'
+        />
+      </div>
+      <button type="submit">create</button>
+    </form>
+
   )
 }
 

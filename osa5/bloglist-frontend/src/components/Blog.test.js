@@ -74,12 +74,12 @@ test('<BlogForm /> call is made with right props', async () => {
   const createBlog = jest.fn()
 
   render(<BlogForm createBlog={createBlog} />)
-
-  const titleField = screen.getByPlaceholderText('write title', {exact : false})
-  const authorField = screen.getByPlaceholderText('write author', {exact : false})
-  const urlField = screen.getByPlaceholderText('write url', {exact : false})
+  
+  const titleField = screen.getByPlaceholderText('write title', { exact : false })
+  const authorField = screen.getByPlaceholderText('write author', { exact : false })
+  const urlField = screen.getByPlaceholderText('write url', { exact : false })
   console.log(titleField)
-  const sendButton = screen.getByText('create', {exact : false})
+  const sendButton = screen.getByText('create')
 
   await user.type(titleField, 'testiotsikko')
   await user.type(authorField, 'testiauthor')
@@ -87,5 +87,7 @@ test('<BlogForm /> call is made with right props', async () => {
   await user.click(sendButton)
 
   expect(createBlog.mock.calls).toHaveLength(1)
-  expect(createBlog.mock.calls[0][0].content).toBe('testiotsikko')
+  expect(createBlog.mock.calls[0][0].title).toBe('testiotsikko')
+  expect(createBlog.mock.calls[0][0].author).toBe('testiauthor')
+  expect(createBlog.mock.calls[0][0].url).toBe('testiurl')
 })
