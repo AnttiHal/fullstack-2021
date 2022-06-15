@@ -22,21 +22,21 @@ const create = async newObject => {
 }
 
 const remove = async (Blogid) => {
-  console.log("removessa id"+Blogid)
+  console.log('removessa id'+Blogid)
   const config = {
     headers: { Authorization: token },
   }
 
   await axios.delete(`${baseUrl}/${Blogid}`, config)
-  
+
 }
 const like = async (blogToUpdate) => {
   const config = {
     headers: { Authorization: token },
   }
-  
+
   const response = await axios
-  .put(`${baseUrl}/${blogToUpdate.id}`, blogToUpdate, config)
+    .put(`${baseUrl}/${blogToUpdate.id}`, blogToUpdate, config)
   return response.data
 }
 
