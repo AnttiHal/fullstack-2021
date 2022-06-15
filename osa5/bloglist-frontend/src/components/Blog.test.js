@@ -1,4 +1,4 @@
-/* eslint-disable testing-library/no-container */
+
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { fireEvent, render, screen } from '@testing-library/react'
@@ -74,7 +74,7 @@ test('<BlogForm /> call is made with right props', async () => {
   const createBlog = jest.fn()
 
   render(<BlogForm createBlog={createBlog} />)
-  
+
   const titleField = screen.getByPlaceholderText('write title', { exact : false })
   const authorField = screen.getByPlaceholderText('write author', { exact : false })
   const urlField = screen.getByPlaceholderText('write url', { exact : false })
