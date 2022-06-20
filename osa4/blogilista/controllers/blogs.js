@@ -20,7 +20,11 @@ blogsRouter.get('/', async (request, response) => {
     return response.status(204).end()
   }
 
-  
+  if ( blogToDelete.user && blogToDelete.user.toString() !== request.user.id ) {
+    return response.status(401).json({
+      error: 'only the creator can delete a blog'
+    })
+  }
 
   await Blog.findByIdAndRemove(request.params.id)
 
