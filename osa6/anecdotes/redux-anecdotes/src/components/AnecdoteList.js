@@ -9,7 +9,7 @@ const AnecdoteList = (props) => {
     const dispatch = useDispatch()
     const sortedAnecdotes = orderBy(anecdotes, ["votes"], ["desc"]);
     const filter = useSelector(state => state.filter)
-    const FilteredAnecdotes = sortedAnecdotes.filter((a) => a.content.toUpperCase().includes(filter.toUpperCase()))
+    const FilteredAnecdotes = sortedAnecdotes.filter((a) => a.content.includes(filter))
 
     const vote = (anecdote) => {
         console.log('vote', anecdote.id)
