@@ -1,10 +1,12 @@
 import { useSelector, useDispatch } from 'react-redux'
-
+import { orderBy } from "lodash";
 import { voteAnecdote } from '../reducers/anecdoteReducer'
 
 const AnecdoteList = (props) => {
-    const anecdotes = useSelector(state => state)
+    const anecdotes = useSelector(state => state.anecdotes)
+    console.log(anecdotes)
     const dispatch = useDispatch()
+    const sortedAnecdotes = orderBy(anecdotes, ["votes"], ["desc"]);
 
     const vote = (id) => {
         console.log('vote', id)
@@ -13,7 +15,7 @@ const AnecdoteList = (props) => {
     return (
       <div>
         <h2>Anecdotes</h2>
-        {anecdotes.sort((a,b) => (a.votes<b.votes)) && anecdotes.map(anecdote =>
+        {sortedAnecdotes.map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
