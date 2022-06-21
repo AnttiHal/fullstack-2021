@@ -8,6 +8,8 @@ const AnecdoteList = (props) => {
     console.log(anecdotes)
     const dispatch = useDispatch()
     const sortedAnecdotes = orderBy(anecdotes, ["votes"], ["desc"]);
+    const filter = useSelector(state => state.filter)
+    const FilteredAnecdotes = sortedAnecdotes.filter((a) => a.content.toUpperCase().includes(filter.toUpperCase()))
 
     const vote = (anecdote) => {
         console.log('vote', anecdote.id)
@@ -19,14 +21,14 @@ const AnecdoteList = (props) => {
       }
     return (
       <div>
-        <h2>Anecdotes</h2>
-        {sortedAnecdotes.map(anecdote =>
+        
+        {FilteredAnecdotes.map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
           </div>
           <div>
-            has {anecdote.votes}
+            has {anecdote.votes} 
             <button onClick={() => vote(anecdote)}>vote</button>
           </div>
         </div>
