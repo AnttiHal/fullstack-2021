@@ -8,10 +8,10 @@ const AnecdoteList = (props) => {
     console.log(anecdotes)
     const dispatch = useDispatch()
     const sortedAnecdotes = orderBy(anecdotes, ["votes"], ["desc"]);
-    const filter = useSelector(state => state.filter)
-    const FilteredAnecdotes = sortedAnecdotes.filter((a) => a.content.includes(filter))
+    const filtered = useSelector(state => state.filter)
+    const FilteredAnecdotes = sortedAnecdotes.filter((a) => a.content.includes(filtered))
 
-    const voteAnecdote = (anecdote) => {
+    const voteAnecdote = (anecdote) => {    
         console.log('vote', anecdote.id)
         dispatch(vote(anecdote.id))
         dispatch(createNotification(`You voted: ${anecdote.content}`))
