@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import anecdoteReducer from './reducers/anecdoteReducer'
 import notificationReducer from './reducers/notificationReducer'
 import filterReducer from './reducers/filterReducer'
@@ -9,7 +9,8 @@ const store = configureStore({
       anecdotes: anecdoteReducer,
       notification: notificationReducer,
       filter: filterReducer
-    }
+    },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
   })
 
   export default store

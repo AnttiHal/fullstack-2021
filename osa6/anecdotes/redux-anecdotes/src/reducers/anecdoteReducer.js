@@ -6,8 +6,9 @@ const anecdoteSlice = createSlice({
   initialState: [],
   reducers: {
     voteAnecdote(state, action) {
-      state.map((anecdote) =>
-        anecdote.id === action.data
+     console.log('actiondata: '+action.payload.data.content)
+      return state.map((anecdote) =>
+        anecdote.id === action.payload.data.id
           ? { ...anecdote, votes: anecdote.votes + 1 }
           : anecdote
       )
