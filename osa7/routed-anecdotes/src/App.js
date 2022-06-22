@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import  { useField } from './hooks'
 import {
   BrowserRouter as Router,
   Routes, Route, Link, useParams, useNavigate
@@ -77,19 +78,21 @@ const Notification = ({notification}) => {
 )}
 
 const CreateNew = (props) => {
-  console.log(JSON.stringify(props))
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+  const {reset: resetContent, ...content} = useField('content')
+  const {reset: resetAuthor, ...author} = useField('author')
+  const {reset: resetInfo, ...info} = useField('info')
+  
+  
   let back = useNavigate()
 
   const handleSubmit = (e) => {
+    
     e.preventDefault()
     
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0
     })
     
@@ -97,30 +100,40 @@ const CreateNew = (props) => {
     
   }
 
+
+
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit }>
+      <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input {...content} />
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input {...author}/>
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input {...info}/>
         </div>
         <button>create</button>
       </form>
+      <button onClick={() => {
+        resetContent()
+        resetAuthor()
+        resetInfo()
+      }
+        }>reset</button>
     </div>
   )
 
 }
 
 const App = () => {
+
+  
   const [anecdotes, setAnecdotes] = useState([
     {
       content: 'If it hurts, do it more often',
