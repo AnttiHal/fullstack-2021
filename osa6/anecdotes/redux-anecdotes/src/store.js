@@ -10,7 +10,9 @@ const store = configureStore({
       notification: notificationReducer,
       filter: filterReducer
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        serializableCheck: false,
+    }),
   })
 
   export default store
