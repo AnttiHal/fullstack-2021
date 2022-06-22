@@ -23,6 +23,7 @@ const filterSlice = createSlice({
   export const handleNotification = (text, time) =>{
     
     return dispatch => {
+        clearTimeout(id)
         dispatch(createNotification(text))
         id = setTimeout(() => {
             dispatch(removeNotification())
