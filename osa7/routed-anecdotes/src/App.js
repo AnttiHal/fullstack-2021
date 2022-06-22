@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {
   BrowserRouter as Router,
-  Routes, Route, Link, useParams
+  Routes, Route, Link, useParams, useNavigate
 } from "react-router-dom"
 
 const Menu = () => {
@@ -46,14 +46,11 @@ const About = () => (
 const Anecdote = ({anecdotes}) => {
   const id = useParams().id
   const anecdote = anecdotes.find(n => n.id === Number(id)) 
-  const info = anecdote.info
   return (
   <div>
     <h2>{anecdote.content} by {anecdote.author}</h2>
     <p>Has {anecdote.votes} votes</p>
     <p>For more info, please visit <a href={anecdote.info}>{anecdote.info}</a></p>
-
-
     <p>Software engineering is full of excellent anecdotes, at this app you can find the best and add more.</p>
   </div>
 )}
@@ -66,27 +63,44 @@ const Footer = () => (
   </div>
 )
 
+const Notification = ({notification}) => {
+  const styling = {
+    border: `2px solid red`,
+    padding: 10, 
+    
+
+  }
+  return (
+  <div style={styling}>
+    {notification}
+  </div>
+)}
+
 const CreateNew = (props) => {
   console.log(JSON.stringify(props))
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
-
+  let back = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    
     props.addNew({
       content,
       author,
       info,
       votes: 0
     })
+    
+    back(`/`)
+    
   }
 
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit }>
         <div>
           content
           <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
@@ -129,6 +143,10 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`A new anecdote ${anecdote.content} created!`)
+    setTimeout(() => {
+      setNotification('')
+    }, 3000);
   }
 
   const anecdoteById = (id) =>
@@ -149,7 +167,12 @@ const App = () => {
     <Router>
       <div>
         <h1>Software anecdotes</h1>
+        
         <Menu />
+        {notification.length > 0 && 
+        <Notification notification={notification}/>
+        }
+        
 
         <Routes>
           <Route path="/anecdotes/:id" element={<Anecdote anecdotes={anecdotes} />} />
