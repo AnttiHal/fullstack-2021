@@ -9,22 +9,27 @@ import {
   Routes, Route
 } from 'react-router-dom'
 import { Form, Button, Table } from 'react-bootstrap'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { createNotification, removeNotification } from './reducers/notificationReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [reload, setReload] = useState(null)
   const [variant, setVariant] = useState('success')
 
+
+
   const dispatch = useDispatch()
+  const blogs = useSelector(state => state.blogs)
+  console.log(blogs)
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
-  }, [reload])
+    dispatch(initializeBlogs())
+    //blogService.getAll().then((blogs) => setBlogs(blogs))
+  }, [dispatch])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -37,7 +42,7 @@ const App = () => {
 
   const addBlog = (blogObject) => {
     blogService.create(blogObject).then((returnedBlog) => {
-      setBlogs(blogs.concat(returnedBlog))
+      //setBlogs(blogs.concat(returnedBlog))
       setVariant('success')
       dispatch(createNotification(`New blog added! Name: ${returnedBlog.title}, author: ${returnedBlog.author}`))
       setTimeout(() => {
