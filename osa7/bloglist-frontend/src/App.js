@@ -9,15 +9,18 @@ import {
   Routes, Route
 } from 'react-router-dom'
 import { Form, Button, Table } from 'react-bootstrap'
+import { useDispatch } from 'react-redux'
+import { createNotification, removeNotification } from './reducers/notificationReducer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [errorMessage, setErrorMessage] = useState(null)
   const [user, setUser] = useState(null)
   const [reload, setReload] = useState(null)
   const [variant, setVariant] = useState('success')
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -36,17 +39,15 @@ const App = () => {
     blogService.create(blogObject).then((returnedBlog) => {
       setBlogs(blogs.concat(returnedBlog))
       setVariant('success')
-      setErrorMessage(
-        `New blog added! Name: ${returnedBlog.title}, author: ${returnedBlog.author}`
-      )
+      dispatch(createNotification(`New blog added! Name: ${returnedBlog.title}, author: ${returnedBlog.author}`))
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch(removeNotification())
       }, 5000)
     }).catch((err) => {
       setVariant('danger')
-      setErrorMessage('You have to fill all the fields.')
+      dispatch(createNotification('You have to fill all the fields.'))
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch(removeNotification())
       }, 5000)
       console.log(err)
     })
@@ -73,9 +74,9 @@ const App = () => {
 
   const handleLogout = async () => {
     window.localStorage.removeItem('loggedBlogappUser')
-    setErrorMessage('Successfully logged out. Happy day!')
+    dispatch(createNotification('Successfully logged out. Happy day!'))
     setTimeout(() => {
-      setErrorMessage(null)
+      dispatch(removeNotification())
     }, 5000)
     setUser(null)
   }
@@ -93,16 +94,16 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      dispatch(createNotification(`welcome ${user.name}`))
       setVariant('success')
-      setErrorMessage(`welcome ${user.name}`)
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch(removeNotification())
       }, 4000)
     } catch (exception) {
       setVariant('danger')
-      setErrorMessage('wrong credentials')
+      dispatch(createNotification('wrong credentials'))
       setTimeout(() => {
-        setErrorMessage(null)
+        dispatch(removeNotification())
       }, 5000)
     }
   }
@@ -110,7 +111,7 @@ const App = () => {
   const Login = () => {
     return (
       <div>
-        <Notification message={errorMessage} variant={variant}/>
+        <Notification variant={variant}/>
 
         <h2>Login to application</h2>
         <Form onSubmit={handleLogin}>
@@ -145,7 +146,7 @@ const App = () => {
   const Frontpage = () => {
     return (
       <div className='d-grid gap-3'>
-        <Notification message={errorMessage} variant={variant}/>
+        <Notification variant={variant}/>
         <h2>blogs</h2>
         <p>
           {user.name} logged in <Button onClick={handleLogout}>Logout</Button>
