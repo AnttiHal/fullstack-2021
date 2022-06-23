@@ -10,14 +10,13 @@ import {
 } from 'react-router-dom'
 import { Form, Button, Table } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { createNotification, removeNotification } from './reducers/notificationReducer'
-import { initializeBlogs } from './reducers/blogReducer'
+import { createNotification, removeNotification, } from './reducers/notificationReducer'
+import { initializeBlogs, createBlog, like, removeBlog } from './reducers/blogReducer'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [reload, setReload] = useState(null)
   const [variant, setVariant] = useState('success')
 
 
@@ -25,6 +24,7 @@ const App = () => {
   const dispatch = useDispatch()
   const blogs = useSelector(state => state.blogs)
   console.log(blogs)
+  const arrayForSort = [...blogs]
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -41,39 +41,37 @@ const App = () => {
   }, [])
 
   const addBlog = (blogObject) => {
-    blogService.create(blogObject).then((returnedBlog) => {
-      //setBlogs(blogs.concat(returnedBlog))
+    try{
+      dispatch(createBlog(blogObject))
       setVariant('success')
-      dispatch(createNotification(`New blog added! Name: ${returnedBlog.title}, author: ${returnedBlog.author}`))
+      dispatch(createNotification(`New blog added! Name: ${blogObject.title}, author: ${blogObject.author}`))
       setTimeout(() => {
         dispatch(removeNotification())
       }, 5000)
-    }).catch((err) => {
+    } catch (e) {
       setVariant('danger')
-      dispatch(createNotification('You have to fill all the fields.'))
+      dispatch(createNotification('Fill all the fields.'))
       setTimeout(() => {
         dispatch(removeNotification())
       }, 5000)
-      console.log(err)
-    })
+      console.log(e)
+    }
+
+
+
+    //setBlogs(blogs.concat(returnedBlog))
+
+
   }
 
   const handleLikechange = async (blog) => {
-    await blogService.like({
-      id: blog.id,
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
-    })
-    setReload(reload + 1)
+    dispatch(like(blog))
   }
 
   const handleDelete = async (blog) => {
     console.log(blog.id)
     if (window.confirm(`Remove ${blog.title} by ${blog.author}`)) {
-      await blogService.remove(blog.id)
-      setReload(reload + 1)
+      dispatch(removeBlog(blog.id))
     }
   }
 
@@ -161,8 +159,8 @@ const App = () => {
         </Togglable>
         <Table striped>
           <tbody>
-            {blogs.sort((a, b) => a.likes > b.likes) &&
-        blogs.map((blog) => (
+            {arrayForSort.sort((a, b) => a.likes > b.likes) &&
+        arrayForSort.map((blog) => (
           <Blog
             key={blog.id}
             blog={blog}

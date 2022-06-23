@@ -5,21 +5,23 @@ const blogSlice = createSlice({
   name: 'blogs',
   initialState: [],
   reducers: {
-    /*voteAnecdote(state, action) {
-      console.log('actiondata: '+action.payload.data.content)
-      return state.map((anecdote) =>
-        anecdote.id === action.payload.data.id
-          ? { ...anecdote, votes: anecdote.votes + 1 }
-          : anecdote
+    likeBlog(state, action) {
+      console.log('actiondata: '+JSON.stringify(action.payload))
+      return state.map((blog) =>
+        blog.id === action.payload.id
+          ? { ...blog, likes: blog.likes + 1 }
+          : blog
       )
-    },*/
+    },
     appendBlog(state, action) {
       state.push(action.payload)
     },
     setBlogs(state, action) {
-      console.log(action.data)
       return action.payload
     }
+  },
+  deleteBlog(state, action) {
+    return state.filter((blog) => blog.id !== String(action.data))
   }
 })
 
@@ -33,13 +35,28 @@ export const createBlog = content => {
 export const initializeBlogs = () => {
   return async dispatch => {
     const blogs = await blogService.getAll()
-    console.log('this is called')
     dispatch(setBlogs(blogs))
+  }
+}
+
+export const like = (id) => {
+  return async dispatch => {
+    console.log(id)
+    const blogToUpdate = await blogService.like(id)
+    dispatch(likeBlog(blogToUpdate))
+  }
+}
+
+export const removeBlog = (id) => {
+  return async dispatch => {
+    console.log(id)
+    const blogToUpdate = await blogService.remove(id)
+    dispatch(likeBlog(blogToUpdate))
   }
 }
 
 
 
 
-export const {  appendBlog, setBlogs } = blogSlice.actions
+export const {  likeBlog,appendBlog, setBlogs } = blogSlice.actions
 export default blogSlice.reducer

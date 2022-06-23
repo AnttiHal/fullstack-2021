@@ -15,7 +15,8 @@ blogsRouter.get('/', async (request, response) => {
 
   blogsRouter.delete('/:id', async (request, response) => {
     console.log("id bäkkärissä"+request.params.id)
-    const blogToDelete = await Blog.findById(request.params.id)
+    const blogToDelete = Blog.findById(request.params.id)
+    console.log('poistettava blogi: '+blogToDelete)
   if (!blogToDelete ) {
     return response.status(204).end()
   }
