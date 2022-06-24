@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
 
 const tokenExtractor = (request, response, next) => {
   // tokenin ekstraktoiva koodi
@@ -16,11 +17,11 @@ const userExtractor = async (request, response, next) => {
   const token = request.token
   if (token) {
     const decodedToken = jwt.verify(token, process.env.SECRET)
-    const user = request.user
-    user = await User.findById(decodedToken.id)
+    
+    request.user = await User.findById(decodedToken.id)
   }
   
   next()
 }
   
-module.exports = {tokenExtractor}
+module.exports = {tokenExtractor, userExtractor}
