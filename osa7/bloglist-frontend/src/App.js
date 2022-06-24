@@ -5,8 +5,9 @@ import loginService from './services/login'
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
+import userService from './services/users'
 import {
-  Routes, Route
+  Routes, Route, Link
 } from 'react-router-dom'
 import { Form, Button, Table } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
@@ -18,12 +19,15 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [variant, setVariant] = useState('success')
+  const [users, setUsers] = useState([])
 
-
+  const padding = {
+    padding: 5
+  }
 
   const dispatch = useDispatch()
   const blogs = useSelector(state => state.blogs)
-  console.log(blogs)
+
   const arrayForSort = [...blogs]
 
   useEffect(() => {
@@ -38,6 +42,14 @@ const App = () => {
       setUser(user)
       blogService.setToken(user.token)
     }
+  }, [])
+
+  useEffect(() => {
+    const getUsers = async () => {
+      const usersAtStart = await userService.getAll()
+      setUsers(usersAtStart)
+    }
+    getUsers()
   }, [])
 
   const addBlog = (blogObject) => {
@@ -146,6 +158,21 @@ const App = () => {
     )
   }
 
+  const Users = ({ users }) => {
+    console.log(users)
+    return (
+      <div>
+        <Notification variant={variant}/>
+
+        <h2>Users</h2>
+        {users.map((user) => {
+          {user.name}
+          {blogs.length}
+        })}
+      </div>
+    )
+  }
+
   const Frontpage = () => {
     return (
       <div className='d-grid gap-3'>
@@ -174,10 +201,7 @@ const App = () => {
     )
   }
 
-  <Routes>
-    <Route path="/login" element={<Login />} />
-    <Route path="/" element={<Frontpage />} />
-  </Routes>
+
   if (user === null) {
     return (
       <div className='container'>
@@ -187,7 +211,15 @@ const App = () => {
   }
   return (
     <div className='container'>
-      <Frontpage />
+      <div>
+        <Link style={padding} to="/">home</Link>
+        <Link style={padding} to="/users">users</Link>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Frontpage />} />
+          <Route path="/users" element={<Users users={users}/>} />
+        </Routes>
+      </div>
     </div>
   )
 }
